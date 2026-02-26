@@ -146,7 +146,7 @@ public class ActivateUserUseCaseTest {
                 now
         );
 
-        // Lo activamos correctamente usando el nuevo método
+        // activo correctamente usando el nuevo método
         user.activate("codigo123", now);
 
         when(repository.findByEmail("correo@padilla.com"))

@@ -1,5 +1,6 @@
 package ar.edu.undec.core.order.model;
 
+import ar.edu.undec.core.exceptions.ValidationException;
 import ar.edu.undec.core.user.model.User;
 import ar.edu.undec.core.user.model.UserStatus;
 
@@ -67,14 +68,31 @@ public class Order {
     public void changeStatus(OrderStatus newStatus, LocalDateTime now) {
 
         if (newStatus == null)
-            throw new IllegalArgumentException("El nuevo estado no puede ser nulo");
+            throw new ValidationException("El nuevo estado no puede ser nulo");
 
-        if (!isValidTransition(this.status, newStatus))
-            throw new IllegalStateException("Transición de estado inválida: "
-                    + this.status + " -> " + newStatus);
+        if (this.status == OrderStatus.PENDING) {
 
-        this.status = newStatus;
-        this.updatedAt = now;
+            if (newStatus == OrderStatus.PROCESSING ||
+                    newStatus == OrderStatus.CANCELLED) {
+
+                this.status = newStatus;
+                this.updatedAt = now;
+                return;
+            }
+        }
+
+        if (this.status == OrderStatus.PROCESSING) {
+
+            if (newStatus == OrderStatus.APPROVED ||
+                    newStatus == OrderStatus.REJECTED) {
+
+                this.status = newStatus;
+                this.updatedAt = now;
+                return;
+            }
+        }
+
+        throw new IllegalStateException("Transición de estado inválida");
     }
 
     private boolean isValidTransition(OrderStatus from, OrderStatus to) {
@@ -91,6 +109,46 @@ public class Order {
                 return false;
         }
     }
+
+
+    // FACTORY FROM ENTITY
+// (usado por infraestructura)
+// =========================
+    public static Order factoryFromEntity(Long id,
+                                          User user,
+                                          OrderStatus status,
+                                          BigDecimal amount,
+                                          LocalDateTime createdAt,
+                                          LocalDateTime updatedAt) {
+
+        if (id == null)
+            throw new ValidationException("El id no puede ser nulo");
+
+        if (user == null)
+            throw new ValidationException("El usuario no puede ser nulo");
+
+        if (status == null)
+            throw new ValidationException("El estado no puede ser nulo");
+
+        if (amount == null)
+            throw new ValidationException("El monto no puede ser nulo");
+
+        if (createdAt == null)
+            throw new ValidationException("La fecha de creación no puede ser nula");
+
+        if (updatedAt == null)
+            throw new ValidationException("La fecha de actualización no puede ser nula");
+
+        return new Order(
+                id,
+                user,
+                status,
+                amount,
+                createdAt,
+                updatedAt
+        );
+    }
+
 
     // =========================
     // GETTERS

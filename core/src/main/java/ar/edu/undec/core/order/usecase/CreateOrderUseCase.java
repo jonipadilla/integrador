@@ -1,5 +1,6 @@
 package ar.edu.undec.core.order.usecase;
 
+import ar.edu.undec.core.order.input.CreateOrderInput;
 import ar.edu.undec.core.order.input.OrderDTO;
 import ar.edu.undec.core.order.model.Order;
 import ar.edu.undec.core.order.repository.CreateOrderRepository;
@@ -9,7 +10,7 @@ import ar.edu.undec.core.user.model.User;
 
 import java.math.BigDecimal;
 
-public class CreateOrderUseCase {
+public class CreateOrderUseCase implements CreateOrderInput {
 
 
     private final CreateOrderRepository orderRepository;
@@ -24,6 +25,7 @@ public class CreateOrderUseCase {
         this.timeProvider = timeProvider;
     }
 
+    @Override
     public OrderDTO execute(Long userId, BigDecimal amount) {
 
         User user = findUserRepository.findById(userId)

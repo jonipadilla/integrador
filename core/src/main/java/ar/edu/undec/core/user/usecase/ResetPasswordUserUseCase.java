@@ -2,10 +2,11 @@ package ar.edu.undec.core.user.usecase;
 
 import ar.edu.undec.core.exceptions.ValidationException;
 import ar.edu.undec.core.time.TimeProvider;
+import ar.edu.undec.core.user.input.ResetPasswordUserInput;
 import ar.edu.undec.core.user.model.User;
 import ar.edu.undec.core.user.repository.ResetPasswordUserRepository;
 
-public class ResetPasswordUserUseCase {
+public class ResetPasswordUserUseCase implements ResetPasswordUserInput {
 
     private final ResetPasswordUserRepository repository;
     private final TimeProvider timeProvider;
@@ -16,6 +17,7 @@ public class ResetPasswordUserUseCase {
         this.timeProvider = timeProvider;
     }
 
+    @Override
     public void execute(String email,
                         String resetCode,
                         String newPassword) {

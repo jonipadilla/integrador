@@ -45,9 +45,7 @@ public class OrderUnitTest {
         );
     }
 
-    // =========================
     // TESTS
-    // =========================
 
     @Test
     void createOrder_ShouldInitializePendingStatus_WhenUserIsActive() {

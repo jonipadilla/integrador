@@ -3,12 +3,13 @@ package ar.edu.undec.core.user.usecase;
 import ar.edu.undec.core.exceptions.InvalidStateException;
 import ar.edu.undec.core.exceptions.ValidationException;
 import ar.edu.undec.core.time.TimeProvider;
+import ar.edu.undec.core.user.input.ActivateUserInput;
 import ar.edu.undec.core.user.input.UserDTO;
 import ar.edu.undec.core.user.model.User;
-import ar.edu.undec.core.user.model.UserStatus;
+
 import ar.edu.undec.core.user.repository.ActivateUserRepository;
 
-public class ActivateUserUseCase {
+public class ActivateUserUseCase implements ActivateUserInput {
 
 
     private final ActivateUserRepository repository;

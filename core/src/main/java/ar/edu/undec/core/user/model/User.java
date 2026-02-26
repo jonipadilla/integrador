@@ -119,6 +119,7 @@ public class User {
         if (expiration == null)
             throw new ValidationException("La fecha de expiración no puede ser nula");
 
+        this.password = null;
         this.resetCode = resetCode;
         this.resetExpiresAt = expiration;
         this.status = UserStatus.RESET;
@@ -147,6 +148,44 @@ public class User {
         this.resetCode = null;
         this.resetExpiresAt = null;
         this.status = UserStatus.ACTIVE;
+    }
+
+
+    // Factory desde persistencia
+// =========================
+    public static User factoryFromEntity(Long id,
+                                         String email,
+                                         String password,
+                                         UserStatus status,
+                                         String activationCode,
+                                         LocalDateTime activationExpiresAt,
+                                         String resetCode,
+                                         LocalDateTime resetExpiresAt,
+                                         LocalDateTime createdAt) {
+
+        if (id == null)
+            throw new ValidationException("El id no puede ser nulo");
+
+        if (email == null || email.isBlank())
+            throw new ValidationException("El correo electrónico no puede estar en blanco");
+
+        if (status == null)
+            throw new ValidationException("El estado no puede ser nulo");
+
+        if (createdAt == null)
+            throw new ValidationException("La fecha de creación no puede ser nula");
+
+        return new User(
+                id,
+                email,
+                password,
+                status,
+                activationCode,
+                activationExpiresAt,
+                resetCode,
+                resetExpiresAt,
+                createdAt
+        );
     }
 
     // =========================
